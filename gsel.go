@@ -25,10 +25,22 @@ func main() {
 
 		jsonString := string(jsonFile)
 		selector := c.Args()[0]
+
+		if c.Bool("debug") {
+			jsonselect.EnableLogger()
+		}
+
 		parser, _ := jsonselect.CreateParserFromString(jsonString)
 		results, _ := parser.GetValues(selector)
 
 		fmt.Print(results)
+	}
+
+	app.Flags = []cli.Flag{
+		cli.BoolFlag{
+			Name:  "debug, d",
+			Usage: "print the very verbose debug logs of json-select",
+		},
 	}
 
 	app.Run(os.Args)
