@@ -17,14 +17,22 @@ func check(e error) {
 func main() {
 	app := cli.NewApp()
 	app.Name = "gsel"
-	app.Usage = "selector infile"
+	app.Usage = "JSON processor with pseudo-css syntax"
 
 	app.Action = func(c *cli.Context) {
-		jsonFile, err := ioutil.ReadFile(c.Args()[1])
+		selector := c.Args()[0]
+		var jsonFile []byte
+		var err error
+
+		if name := c.String("file"); name != "" {
+			jsonFile, err = ioutil.ReadFile(name)
+
+		} else {
+			jsonFile, err = ioutil.ReadAll(os.Stdin)
+		}
 		check(err)
 
 		jsonString := string(jsonFile)
-		selector := c.Args()[0]
 
 		if c.Bool("debug") {
 			jsonselect.EnableLogger()
@@ -37,6 +45,13 @@ func main() {
 	}
 
 	app.Flags = []cli.Flag{
+		cli.StringFlag{
+			Name:  "file, f",
+			Value: "",
+			Usage: "Input file containing valid json. Gsel " +
+				"will ignore standard input if this flag is " +
+				"defined",
+		},
 		cli.BoolFlag{
 			Name:  "debug, d",
 			Usage: "print the very verbose debug logs of json-select",

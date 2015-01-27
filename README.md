@@ -3,6 +3,14 @@ Gsel
 
 A command line tool to wrap this [json-select go implementation].
 
+**Usage**:
+
+```
+# in this directory
+gsel .a.b < test_data/simple.json
+# => [true]
+```
+
 **WARNING**: this is a very alpha project, mostly a pretext to play with
 go for my own amusement. Use this code at your own risk.
 
